@@ -37,7 +37,8 @@ dependencies:
   intl: ^0.17.0
   pie_chart: ^5.3.2
   # firebase_auth: ^3.4.1
-  # firebase_database: ^9.0.18
+  firebase_database: ^9.0.18
+  firebase_core: ^1.19.2
   # google_sign_in: ^5.4.0
 
 dev_dependencies:
