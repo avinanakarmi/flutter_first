@@ -16,16 +16,18 @@ class LeavesDetail extends StatefulWidget {
 
 class _LeavesDetailState extends State<LeavesDetail> {
   List<Leave> leaves = [
-    // Leave(
-    //   startDate: DateTime(2022, 1, 4),
-    //   endDate: DateTime(2022, 1, 4),
-    //   reason: "Sick",
-    // ),
-    // Leave(
-    //   startDate: DateTime(2022, 2, 6),
-    //   endDate: DateTime(2022, 2, 8),
-    //   reason: "Sick",
-    // ),
+    Leave(
+      startDate: DateTime(2022, 1, 4),
+      endDate: DateTime(2022, 1, 4),
+      reason: "Sick",
+      type: "Full"
+    ),
+    Leave(
+      startDate: DateTime(2022, 2, 6),
+      endDate: DateTime(2022, 2, 8),
+      reason: "Sick",
+      type: "Half"
+    ),
   ];
 
   @override
@@ -49,6 +51,7 @@ class _LeavesDetailState extends State<LeavesDetail> {
                           startDate: leave.startDate,
                           endDate: leave.endDate,
                           reason: leave.reason,
+                          type: leave.type,
                         ))
                     .toList(),
               ) : const NoLeavesTaken(),
