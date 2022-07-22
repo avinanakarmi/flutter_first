@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:first/providers/leaves_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DateSelector extends StatefulWidget {
   final String name;
@@ -23,23 +25,44 @@ class DateSelector extends StatefulWidget {
 }
 
 class _DateSelectorState extends State<DateSelector> {
-  Future<void> _selectStartDate(BuildContext context) async {
+  Future<void> _selectStartDate(
+      BuildContext context, unselectableLeaves) async {
+    DateTime? followingSelectableTime;
+    if (unselectableLeaves.contains(DateTime(
+      widget.value.year,
+      widget.value.month,
+      widget.value.day,
+    ))) {
+      followingSelectableTime = widget.value.add(const Duration(days: 1));
+      while (context
+          .read<Leaves>()
+          .unselectableLeaves
+          .contains(followingSelectableTime)) {
+        followingSelectableTime =
+            followingSelectableTime?.add(const Duration(days: 1));
+      }
+      await widget.setValue(followingSelectableTime);
+    }
+    // TO-DO: Disable dates for which leave record exists
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: widget.value,
+      initialDate: followingSelectableTime ?? widget.value,
       firstDate: widget.minValue,
       lastDate: DateTime(2101),
       errorFormatText: 'Enter valid date',
       errorInvalidText: 'Enter date in valid range',
       helpText: "Select ${widget.name}".toUpperCase(),
+      selectableDayPredicate: (DateTime val) {
+        return !context.read<Leaves>().unselectableLeaves.contains(val);
+      },
       builder: (context, child) {
-      return Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.light(primary: Color(0xff5c6bc0)),
-        ),
-        child: child!,
-      );
-    },
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(primary: Color(0xff5c6bc0)),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null && picked != widget.value) {
       widget.setValue(picked);
@@ -50,7 +73,8 @@ class _DateSelectorState extends State<DateSelector> {
   Widget build(BuildContext context) {
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => _selectStartDate(context),
+        onPressed: () => _selectStartDate(
+            context, context.read<Leaves>().unselectableLeaves),
         style: ButtonStyle(
           alignment: Alignment.centerLeft,
           elevation: MaterialStateProperty.all(8.0),

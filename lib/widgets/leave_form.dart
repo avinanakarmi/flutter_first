@@ -1,3 +1,4 @@
+import 'package:first/utilities/database.dart';
 import 'package:first/widgets/custom_switch.dart';
 import 'package:first/widgets/input_field.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class _LeaveFormState extends State<LeaveForm> {
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
   String selectedLeaveType = "Full-Day";
+  String reason = "";
 
   setStartDate(value) {
     setState(() {
@@ -28,6 +30,12 @@ class _LeaveFormState extends State<LeaveForm> {
   setEndDate(value) {
     setState(() {
       selectedEndDate = value;
+    });
+  }
+
+  setReason(value) {
+    setState(() {
+      reason = value;
     });
   }
 
@@ -84,17 +92,20 @@ class _LeaveFormState extends State<LeaveForm> {
                 minValue: DateTime(2015, 8),
               ),
               if (selectedLeaveType != "Half-Day") const SizedBox(width: 25),
-              if (selectedLeaveType != "Half-Day") DateSelector(
-                name: "End Date",
-                setValue: setEndDate,
-                value: selectedEndDate,
-                minValue: selectedStartDate,
-              ),
+              if (selectedLeaveType != "Half-Day")
+                DateSelector(
+                  name: "End Date",
+                  setValue: setEndDate,
+                  value: selectedEndDate,
+                  minValue: selectedStartDate,
+                ),
             ]),
             const SizedBox(
               height: 20,
             ),
-            const InputField(),
+            InputField(
+              setReason: setReason,
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -115,9 +126,22 @@ class _LeaveFormState extends State<LeaveForm> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      _formKey.currentState?.save();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Saving...')),
                       );
+                      logLeave(
+                        selectedStartDate,
+                        selectedEndDate,
+                        reason,
+                        selectedLeaveType,
+                      ).then((value) {
+                        _formKey.currentState?.reset();
+                      }).catchError((error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Could not save data.')),
+                        );
+                      });
                     }
                   },
                   child: const Text('Record Leave'),

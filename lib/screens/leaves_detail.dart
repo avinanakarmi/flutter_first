@@ -17,12 +17,14 @@ class LeavesDetail extends StatefulWidget {
 class _LeavesDetailState extends State<LeavesDetail> {
   List<Leave> leaves = [
     Leave(
+      key: "1",
       startDate: DateTime(2022, 1, 4),
       endDate: DateTime(2022, 1, 4),
       reason: "Sick",
       type: "Full"
     ),
     Leave(
+      key: "2",
       startDate: DateTime(2022, 2, 6),
       endDate: DateTime(2022, 2, 8),
       reason: "Sick",

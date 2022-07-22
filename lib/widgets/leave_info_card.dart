@@ -17,6 +17,7 @@ class LeaveInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TO-DO: add swipe behaviour to delete log
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -35,7 +36,7 @@ class LeaveInfo extends StatelessWidget {
                       DateFormat('dd MMM, yyyy').format(startDate),
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
-                    if (startDate != endDate)
+                    if (type != "Half")
                       Text(
                         " to ${DateFormat('dd MMM, yyyy').format(endDate)}",
                         style: Theme.of(context).textTheme.subtitle1,

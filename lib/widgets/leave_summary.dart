@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 import 'package:first/screens/leaves_detail.dart';
+
+import '../providers/leaves_provider.dart';
 
 class LeaveSummary extends StatefulWidget {
   const LeaveSummary({Key? key}) : super(key: key);
@@ -15,10 +18,7 @@ class LeaveSummary extends StatefulWidget {
 
 class _LeaveSummaryState extends State<LeaveSummary> {
   final double totalLeaves = 24;
-
-  final Map<String, double>  leavesMap = <String, double>{
-    "remaining": 19.5,
-  };
+  double remainingLeaves = 19;
 
   final colorList = <Color>[
     Colors.indigo,
@@ -28,15 +28,6 @@ class _LeaveSummaryState extends State<LeaveSummary> {
 
   Function truncateTrailingZeros =
       (double num) => num.toString().replaceAll(RegExp(r'([.]*0)(?!.*\d)'), '');
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      LeaveSummary.leavesTaken =
-          (totalLeaves - leavesMap.entries.toList()[0].value);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +44,13 @@ class _LeaveSummaryState extends State<LeaveSummary> {
           Row(
             children: <Widget>[
               PieChart(
-                centerText:
-                    "${truncateTrailingZeros(leavesMap.entries.toList()[0].value)}",
+                centerText: "19",
+                // "${truncateTrailingZeros(leavesMap.entries.toList()[0].value)}",
                 centerTextStyle: const TextStyle(
                   color: Colors.indigo,
                   fontSize: 20,
                 ),
-                dataMap: leavesMap,
+                dataMap: const {"remaining": 17},
                 chartType: ChartType.ring,
                 chartRadius: MediaQuery.of(context).size.width / 4,
                 ringStrokeWidth: 8,
@@ -94,7 +85,7 @@ class _LeaveSummaryState extends State<LeaveSummary> {
                         const TextSpan(text: "Leaves Taken: "),
                         TextSpan(
                           text:
-                              "${truncateTrailingZeros(LeaveSummary.leavesTaken)}",
+                              "${truncateTrailingZeros(context.watch<Leaves>().leaveTaken)}",
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ],

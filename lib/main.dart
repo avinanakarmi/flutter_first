@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:first/firebase_options.dart';
+import 'package:first/providers/leaves_provider.dart';
 
 import 'screens/home.dart';
 
@@ -11,7 +13,14 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Leaves()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -33,22 +42,10 @@ class MyApp extends StatelessWidget {
             color: Color(0xff616161),
             fontSize: 20,
           ),
-          bodyText1: TextStyle(
-            color: Color(0xff616161),
-            fontSize: 16
-          ),
-          bodyText2: TextStyle(
-            color: Color(0xff757575),
-            fontSize: 16
-          ),
-          button: TextStyle(
-            color: Colors.white,
-            fontSize: 16
-          ),
-          subtitle1: TextStyle(
-            color: Color(0xff757575),
-            fontSize: 12
-          ),
+          bodyText1: TextStyle(color: Color(0xff616161), fontSize: 16),
+          bodyText2: TextStyle(color: Color(0xff757575), fontSize: 16),
+          button: TextStyle(color: Colors.white, fontSize: 16),
+          subtitle1: TextStyle(color: Color(0xff757575), fontSize: 12),
         ),
       ),
       home: const MyHomePage(title: 'Log Your Leaves'),

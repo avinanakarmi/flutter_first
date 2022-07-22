@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
-class InputField extends StatelessWidget {
-  const InputField({Key? key}) : super(key: key);
+class InputField extends StatefulWidget {
+  const InputField({Key? key, required this.setReason}) : super(key: key);
 
+  final Function setReason;
+
+  @override
+  State<InputField> createState() => _InputFieldState();
+}
+
+class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,6 +31,7 @@ class InputField extends StatelessWidget {
               style: Theme.of(context).textTheme.subtitle1,
             ),
             TextFormField(
+              onSaved: (value) {widget.setReason(value);},
               cursorColor: const Color(0xff5c6bc0),
               validator: (value) {
                 if (value == null || value.isEmpty || value.trim() == "") {
