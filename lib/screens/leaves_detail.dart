@@ -1,9 +1,13 @@
+import 'package:first/classes/leave.dart';
 import 'package:first/widgets/leave_info_card.dart';
 import 'package:first/widgets/no_leaves.dart';
 import 'package:flutter/material.dart';
 
-import 'package:first/classes/leave.dart';
 import 'package:first/widgets/month_selector.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/leaves_provider.dart';
 
 class LeavesDetail extends StatefulWidget {
   const LeavesDetail({Key? key, required this.title}) : super(key: key);
@@ -15,25 +19,17 @@ class LeavesDetail extends StatefulWidget {
 }
 
 class _LeavesDetailState extends State<LeavesDetail> {
-  List<Leave> leaves = [
-    Leave(
-      key: "1",
-      startDate: DateTime(2022, 1, 4),
-      endDate: DateTime(2022, 1, 4),
-      reason: "Sick",
-      type: "Full"
-    ),
-    Leave(
-      key: "2",
-      startDate: DateTime(2022, 2, 6),
-      endDate: DateTime(2022, 2, 8),
-      reason: "Sick",
-      type: "Half"
-    ),
-  ];
+  String selectedMonth = DateFormat('MMMM').format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
+    List<Leave> filteredLeaves = context
+        .read<Leaves>()
+        .leaves
+        .where((leave) =>
+            DateFormat('MMMM').format(leave.startDate) == selectedMonth)
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -41,22 +37,37 @@ class _LeavesDetailState extends State<LeavesDetail> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            const MonthSelector(),
+            MonthSelector(
+              selectedMonth: selectedMonth,
+              setMonth: (value) {
+                filteredLeaves = context
+                    .read<Leaves>()
+                    .leaves
+                    .where((leave) =>
+                        DateFormat('MMMM').format(leave.startDate) == value)
+                    .toList();
+                setState(() {
+                  selectedMonth = value;
+                });
+              },
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 20.0,
                 horizontal: 8.0,
               ),
-              child: leaves.isNotEmpty ? Column(
-                children: leaves
-                    .map((leave) => LeaveInfo(
-                          startDate: leave.startDate,
-                          endDate: leave.endDate,
-                          reason: leave.reason,
-                          type: leave.type,
-                        ))
-                    .toList(),
-              ) : const NoLeavesTaken(),
+              child: filteredLeaves.isNotEmpty
+                  ? Column(
+                      children: filteredLeaves
+                          .map((leave) => LeaveInfo(
+                                startDate: leave.startDate,
+                                endDate: leave.endDate,
+                                reason: leave.reason,
+                                type: leave.type,
+                              ))
+                          .toList(),
+                    )
+                  : const NoLeavesTaken(),
             ),
           ],
         ),

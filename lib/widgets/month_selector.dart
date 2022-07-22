@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MonthSelector extends StatefulWidget {
-  const MonthSelector({Key? key}) : super(key: key);
+  final String selectedMonth;
+  final Function setMonth;
+
+  const MonthSelector({
+    Key? key,
+    required this.selectedMonth,
+    required this.setMonth,
+  }) : super(key: key);
 
   @override
   State<MonthSelector> createState() => _MonthSelectorState();
 }
 
 class _MonthSelectorState extends State<MonthSelector> {
-  String selectedMonth = DateFormat('MMMM').format(DateTime.now());
-
   List<String> months = [
     "January",
     "February",
@@ -25,12 +30,6 @@ class _MonthSelectorState extends State<MonthSelector> {
     "November",
     "December"
   ];
-
-  setMonth(value) {
-    setState(() {
-      selectedMonth = value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +51,8 @@ class _MonthSelectorState extends State<MonthSelector> {
           borderSide: BorderSide(color: Colors.blueGrey, width: 0.5),
         ),
       ),
-      value: selectedMonth,
-      onChanged: setMonth,
+      value: widget.selectedMonth,
+      onChanged: (val) => widget.setMonth(val),
       items: months.map((String items) {
         return DropdownMenuItem(
           value: items,
