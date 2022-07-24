@@ -18,7 +18,10 @@ class Leaves with ChangeNotifier, DiagnosticableTreeMixin {
     _leavesTaken =
         _leavesTaken + double.parse(leaveDuration.toStringAsFixed(1));
 
-    final daysToGenerate = leave.endDate.add(const Duration(days: 1)).difference(leave.startDate).inDays;
+    final daysToGenerate = leave.endDate
+        .add(const Duration(days: 1))
+        .difference(leave.startDate)
+        .inDays;
     var days = List.generate(
         daysToGenerate,
         (i) => DateTime(leave.startDate.year, leave.startDate.month,
@@ -33,7 +36,28 @@ class Leaves with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  /// Makes `Counter` readable inside the devtools by listing all of its properties
+  void remove(key) {
+    var foundLeave = _leaves.where((leave) => leave.key == key).first;
+    final daysToGenerate = foundLeave.endDate
+        .add(const Duration(days: 1))
+        .difference(foundLeave.startDate)
+        .inDays;
+    var days = List.generate(
+        daysToGenerate,
+        (i) => DateTime(foundLeave.startDate.year, foundLeave.startDate.month,
+            foundLeave.startDate.day + (i)));
+
+    for (var day in days) {
+      if (!(_unselectableLeaves.indexWhere((element) => element == day) >= 0)) {
+        _unselectableLeaves.remove(day);
+      }
+    }
+
+    _leaves.removeWhere((leave) => leave.key == key);
+
+    notifyListeners();
+  }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);

@@ -24,7 +24,7 @@ class _LeaveSummaryState extends State<LeaveSummary> {
     Colors.indigo,
   ];
 
-  final String currentMonth = DateFormat("MMMM").format(DateTime.now());
+  final String currentYear = DateFormat("yyyy").format(DateTime.now());
 
   Function truncateTrailingZeros =
       (double num) => num.toString().replaceAll(RegExp(r'([.]*0)(?!.*\d)'), '');
@@ -37,20 +37,20 @@ class _LeaveSummaryState extends State<LeaveSummary> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Leaves Summary for $currentMonth",
+            "Leaves Summary for $currentYear",
             style: Theme.of(context).textTheme.headline6,
           ),
           const SizedBox(height: 20),
           Row(
             children: <Widget>[
               PieChart(
-                centerText: "19",
+                centerText: (24 - context.watch<Leaves>().leaveTaken).toString(),
                 // "${truncateTrailingZeros(leavesMap.entries.toList()[0].value)}",
                 centerTextStyle: const TextStyle(
                   color: Colors.indigo,
                   fontSize: 20,
                 ),
-                dataMap: const {"remaining": 17},
+                dataMap: {"remaining": 24 - context.watch<Leaves>().leaveTaken},
                 chartType: ChartType.ring,
                 chartRadius: MediaQuery.of(context).size.width / 4,
                 ringStrokeWidth: 8,

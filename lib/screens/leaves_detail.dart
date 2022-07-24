@@ -24,7 +24,7 @@ class _LeavesDetailState extends State<LeavesDetail> {
   @override
   Widget build(BuildContext context) {
     List<Leave> filteredLeaves = context
-        .read<Leaves>()
+        .watch<Leaves>()
         .leaves
         .where((leave) =>
             DateFormat('MMMM').format(leave.startDate) == selectedMonth)
@@ -60,6 +60,7 @@ class _LeavesDetailState extends State<LeavesDetail> {
                   ? Column(
                       children: filteredLeaves
                           .map((leave) => LeaveInfo(
+                                id: leave.key,
                                 startDate: leave.startDate,
                                 endDate: leave.endDate,
                                 reason: leave.reason,

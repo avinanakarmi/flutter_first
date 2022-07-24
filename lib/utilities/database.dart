@@ -90,4 +90,11 @@ Future logLeave(
   }
 }
 
-// TO-DO: Delete an entry
+Future deleteLog (String key) async {
+  try {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("/leaves/$key");
+    await ref.remove();
+  } catch (e) {
+    debugPrint(e.toString());
+  }
+}

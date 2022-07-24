@@ -43,7 +43,7 @@ class _DateSelectorState extends State<DateSelector> {
       }
       await widget.setValue(followingSelectableTime);
     }
-    // TO-DO: Disable dates for which leave record exists
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: followingSelectableTime ?? widget.value,
