@@ -50,7 +50,7 @@ class Leaves with ChangeNotifier, DiagnosticableTreeMixin {
     var days = _calcIntermediateDays(foundLeave);
 
     for (var day in days) {
-      if (!(_unselectableLeaves.indexWhere((element) => element == day) >= 0)) {
+      if (_unselectableLeaves.indexWhere((element) => element == day) >= 0) {
         _unselectableLeaves.remove(day);
       }
     }
