@@ -59,7 +59,9 @@ class LeaveInfo extends StatelessWidget {
                         DateFormat('dd MMM, yyyy').format(startDate),
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
-                      if (type != "Half")
+                      if (!(startDate.day == endDate.day &&
+                          startDate.month == endDate.month &&
+                          startDate.year == endDate.year))
                         Text(
                           " to ${DateFormat('dd MMM, yyyy').format(endDate)}",
                           style: Theme.of(context).textTheme.subtitle1,

@@ -71,15 +71,9 @@ Future logLeave(
               // 12 hours added to count half a day
               .add(const Duration(hours: 12))
               .toString()
-          : startDate == endDate
-              ? DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59)
-                  .toString()
-                  .toString()
-              : DateTime(
-                  endDate.year,
-                  endDate.month,
-                  endDate.day,
-                ).toString(),
+          : DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59)
+              .toString()
+              .toString(),
       "reason": reason,
       "type": leaveType,
     });
@@ -90,7 +84,7 @@ Future logLeave(
   }
 }
 
-Future deleteLog (String key) async {
+Future deleteLog(String key) async {
   try {
     DatabaseReference ref = FirebaseDatabase.instance.ref("/leaves/$key");
     await ref.remove();

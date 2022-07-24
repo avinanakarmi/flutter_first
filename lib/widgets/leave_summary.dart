@@ -18,7 +18,6 @@ class LeaveSummary extends StatefulWidget {
 
 class _LeaveSummaryState extends State<LeaveSummary> {
   final double totalLeaves = 24;
-  double remainingLeaves = 19;
 
   final colorList = <Color>[
     Colors.indigo,
@@ -31,6 +30,8 @@ class _LeaveSummaryState extends State<LeaveSummary> {
 
   @override
   Widget build(BuildContext context) {
+    double leavesTaken = context.watch<Leaves>().leaveTaken;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Column(
@@ -44,13 +45,13 @@ class _LeaveSummaryState extends State<LeaveSummary> {
           Row(
             children: <Widget>[
               PieChart(
-                centerText: (24 - context.watch<Leaves>().leaveTaken).toString(),
+                centerText: (24 - leavesTaken).toString(),
                 // "${truncateTrailingZeros(leavesMap.entries.toList()[0].value)}",
                 centerTextStyle: const TextStyle(
                   color: Colors.indigo,
                   fontSize: 20,
                 ),
-                dataMap: {"remaining": 24 - context.watch<Leaves>().leaveTaken},
+                dataMap: {"remaining": 24 - leavesTaken},
                 chartType: ChartType.ring,
                 chartRadius: MediaQuery.of(context).size.width / 4,
                 ringStrokeWidth: 8,
@@ -85,7 +86,7 @@ class _LeaveSummaryState extends State<LeaveSummary> {
                         const TextSpan(text: "Leaves Taken: "),
                         TextSpan(
                           text:
-                              "${truncateTrailingZeros(context.watch<Leaves>().leaveTaken)}",
+                              "${truncateTrailingZeros(leavesTaken)}",
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                       ],
