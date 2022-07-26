@@ -27,7 +27,8 @@ class _LeavesDetailState extends State<LeavesDetail> {
         .watch<Leaves>()
         .leaves
         .where((leave) =>
-            DateFormat('MMMM').format(leave.startDate) == selectedMonth)
+            DateFormat('MMMM, yyyy').format(leave.startDate) ==
+            "$selectedMonth, ${DateTime.now().year}")
         .toList();
 
     return Scaffold(
